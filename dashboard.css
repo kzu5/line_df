@@ -1,0 +1,138 @@
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f4f8; /* 明るい背景 */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 960px; /* 少し広めに */
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #4a90e2; /* メインカラー */
+    margin-bottom: 15px;
+    font-size: 2.2em;
+    font-weight: 700;
+}
+
+.last-updated {
+    font-size: 0.9em;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 4つの学習室に合わせて調整 */
+    gap: 25px; /* カード間のスペース */
+    margin-bottom: 30px;
+}
+
+/* 学習室カードのスタイル */
+.room-card {
+    background-color: #ffffff;
+    border-radius: 20px; /* 角丸を大きめに */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 影を強調 */
+    padding: 25px;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 200px; /* ある程度の高さを確保 */
+}
+
+.room-card:hover {
+    transform: translateY(-5px); /* ホバーで少し浮き上がる */
+}
+
+.room-card h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.status-icon {
+    font-size: 3em; /* アイコンを大きく */
+    margin-bottom: 10px;
+}
+
+.remaining-seats {
+    font-size: 3.5em; /* 残席数を最も大きく */
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.remaining-seats span {
+    font-size: 0.5em; /* 「席」の文字を小さく */
+    font-weight: normal;
+}
+
+.status-text {
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* 混雑度に応じた色とアイコンのスタイル */
+.status-icon.empty, .remaining-seats.empty { color: #5cb85c; } /* 緑 */
+.status-icon.low, .remaining-seats.low { color: #5cb85c; } /* 緑 */
+.status-icon.medium, .remaining-seats.medium { color: #f0ad4e; } /* オレンジ */
+.status-icon.high, .remaining-seats.high { color: #d9534f; } /* 赤 */
+.status-icon.full, .remaining-seats.full { color: #d9534f; } /* 赤 */
+
+
+/* 進捗バー (任意) */
+.progress-bar-container {
+    width: 80%;
+    background-color: #eee;
+    border-radius: 10px;
+    height: 12px;
+    margin-top: 15px;
+    overflow: hidden; /* 角丸にするため */
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    width: 0%; /* JSで動的に設定 */
+    transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+.progress-bar.low { background-color: #5cb85c; }
+.progress-bar.medium { background-color: #f0ad4e; }
+.progress-bar.high { background-color: #d9534f; }
+.progress-bar.full { background-color: #d9534f; }
+
+
+.guide-text {
+    font-size: 1em;
+    color: #555;
+    margin-top: 30px;
+    background-color: #e3f2fd; /* 水色の背景 */
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: inline-block; /* コンテンツの幅に合わせる */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* スマホ対応 */
+@media (max-width: 600px) {
+    .rooms-grid {
+        grid-template-columns: 1fr; /* スマホでは縦一列 */
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+}
