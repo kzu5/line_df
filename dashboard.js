@@ -96,17 +96,41 @@ function updateRoomDisplay(id, occupants, capacity) {
 /**
  * Pleasanterからデータを取得し、ダッシュボードを更新するメイン関数
  */
+// ↑↑↑ GASで発行されたウェブアプリのURLに置き換えてください ↑↑↑
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbylAL9f-k7mYys3LhPCKAaTq22_uiYZp0qpBFdT5qsTbELBPJFszpgOZ_5ZFvZFRWRO2w/exec'; 
+
+// 既存の fetchRoomStatus 関数を修正
 async function fetchRoomStatus() {
-    // 💡 実際にはここにPleasanterからのデータ取得ロジックが入ります。
-    // 💡 テスト用として、ダミーデータを使用します。
-    // 💡 A: 混雑中 (70%), B: 空席あり (10%), C: 満席 (100%), D: 非表示
-    const roomData = [
-        { room_id: 'A', current_occupants: 35, total_capacity: ROOM_CAPACITIES['A'] },
-        { room_id: 'B', current_occupants: 3, total_capacity: ROOM_CAPACITIES['B'] },
-        { room_id: 'C', current_occupants: 80, total_capacity: ROOM_CAPACITIES['C'] },
-        // 図書館(D)は、このデータに含まれていない（非公開）と仮定
-        // { room_id: 'D', current_occupants: 10, total_capacity: ROOM_CAPACITIES['D'] },
-    ];
+    
+    // データ取得部分をGASからの取得ロジックに置き換え
+    let roomData = [];
+    try {
+        const response = await fetch(GAS_URL);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        // GASから取得したデータを既存のroomData形式に変換
+        const rawData = await response.json(); 
+        roomData = rawData.map(item => ({
+            room_id: item.ID, // スプレッドシートのヘッダー名に合わせて調整
+            current_occupants: item.occupants,
+            total_capacity: item.capacity
+        }));
+
+    } catch (error) {
+        console.error("データ取得エラー:", error);
+        return; // データ取得失敗時は処理を終了
+    }
+    
+    // ⬇︎⬇︎⬇︎ この下の部分は、そのまま維持します ⬇︎⬇︎⬇︎
+    const now = new Date();
+    const rooms = ['A', 'B', 'C', 'D'];
+
+    rooms.forEach(id => {
+        // ... (定休日判定や表示更新の既存ロジック) ...
+    });
+
+    document.getElementById('last-updated-time').textContent = new Date().toLocaleString();
+}
 
 
     // 現在時刻を取得
