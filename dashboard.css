@@ -136,3 +136,36 @@ h1 {
         font-size: 1.8em;
     }
 }
+
+/* ... 既存のCSS ... */
+
+/* 定休日の施設カードのスタイル */
+.room-card.closed {
+    opacity: 0.5; /* 透明度を下げてグレーアウト */
+    pointer-events: none; /* クリックやホバー効果を無効化 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* 影を控えめに */
+    border: 1px solid #ccc; /* 枠線を薄く */
+}
+
+/* 定休日のテキスト表示用のスタイル */
+.closed-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.2em;
+    color: #cc0000; /* 目立つ色 */
+    border: 2px dashed #cc0000;
+    z-index: 10; /* カード内の他の要素より前面に */
+}
+
+/* 定休日のカードはホバー効果も無効化 */
+.room-card.closed:hover {
+    transform: none; /* ホバー時の浮き上がりをキャンセル */
+}
+
+/* ... 既存のCSS ... */
