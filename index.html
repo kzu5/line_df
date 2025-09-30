@@ -169,51 +169,48 @@
         <h1>リアルタイム 在室状況ダッシュボード</h1>
         <p class="last-updated">最終更新: <span id="last-updated-time">--</span></p>
 
-        <div class="rooms-grid" id="rooms-container">
-            <div class="room-card" id="roomA-card">
-                <h2>生涯学習センター</h2>
-                <div class="status-icon" id="roomA-icon"></div>
-                <div class="remaining-seats" id="roomA-remaining">--<span>席</span></div>
-                <div class="total-capacity">総席数: <span id="roomA-total-capacity">--</span>席</div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="roomA-progress"></div>
+         <div class="room-card" id="roomA-card">
+                <div class="room-content"> 
+                    <h2>生涯学習センター</h2>
+                    <div class="status-icon" id="roomA-icon"></div>
+                    <div class="remaining-seats" id="roomA-remaining">--<span>席</span></div>
+                    <div class="total-capacity">総席数: <span id="roomA-total-capacity">--</span>席</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="roomA-progress"></div>
+                    </div>
+                    <div class="status-text" id="roomA-status-text">--</div>
                 </div>
-                <div class="status-text" id="roomA-status-text">--</div>
+                <div class="closed-overlay" id="roomA-closed-overlay" style="display: none;">休館日</div>
             </div>
 
-            <div class="room-card" id="roomB-card">
-                <h2>創造館</h2>
-                <div class="status-icon" id="roomB-icon"></div>
-                <div class="remaining-seats" id="roomB-remaining">--<span>席</span></div>
-                <div class="total-capacity">総席数: <span id="roomB-total-capacity">--</span>席</div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="roomB-progress"></div>
+          <div class="room-card" id="roomB-card">
+                <div class="room-content"> 
+                    <h2>創造館</h2>
+                    <div class="status-icon" id="roomB-icon"></div>
+                    <div class="remaining-seats" id="roomB-remaining">--<span>席</span></div>
+                    <div class="total-capacity">総席数: <span id="roomB-total-capacity">--</span>席</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="roomA-progress"></div>
+                    </div>
+                    <div class="status-text" id="roomB-status-text">--</div>
                 </div>
-                <div class="status-text" id="roomB-status-text">--</div>
+                <div class="closed-overlay" id="roomB-closed-overlay" style="display: none;">休館日</div>
             </div>
 
-            <div class="room-card" id="roomC-card">
-                <h2>アルラ</h2>
-                <div class="status-icon" id="roomC-icon"></div>
-                <div class="remaining-seats" id="roomC-remaining">--<span>席</span></div>
-                <div class="total-capacity">総席数: <span id="roomC-total-capacity">--</span>席</div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="roomC-progress"></div>
+           <div class="room-card" id="roomC-card">
+                <div class="room-content"> 
+                    <h2>アルラ</h2>
+                    <div class="status-icon" id="roomC-icon"></div>
+                    <div class="remaining-seats" id="roomC-remaining">--<span>席</span></div>
+                    <div class="total-capacity">総席数: <span id="roomB-total-capacity">--</span>席</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="roomC-progress"></div>
+                    </div>
+                    <div class="status-text" id="roomC-status-text">--</div>
                 </div>
-                <div class="status-text" id="roomC-status-text">--</div>
+                <div class="closed-overlay" id="roomC-closed-overlay" style="display: none;">休館日</div>
             </div>
 
-            <div class="room-card hidden" id="roomD-card">
-                <h2>図書館</h2>
-                <div class="status-icon" id="roomD-icon"></div>
-                <div class="remaining-seats" id="roomD-remaining">--<span>席</span></div>
-                <div class="total-capacity">総席数: <span id="roomD-total-capacity">--</span>席</div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="roomD-progress"></div>
-                </div>
-                <div class="status-text" id="roomD-status-text">--</div>
-            </div>
-        </div>
 
         <p class="guide-text">
             このページは学習室の現在の在室状況をリアルタイムで表示します。
