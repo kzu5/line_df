@@ -71,3 +71,27 @@ async function fetchRoomStatus() {
 
 fetchRoomStatus();
 setInterval(fetchRoomStatus, 60000); // 60秒ごとに更新
+
+// ... (既存のコード) ...
+
+async function fetchRoomStatus() {
+    // ... (Pleasanterから在室人数と総席数を取得するロジック) ...
+
+    // 例: Pleasanterから取得したデータに図書館 (room_id: 'D') の情報が含まれているか確認
+    const libraryData = roomData.find(room => room.room_id === 'D');
+    const roomDCard = document.getElementById('roomD-card');
+
+    if (libraryData && libraryData.current_occupants > 0) { // 図書館に誰かいる場合
+        roomDCard.classList.remove('hidden'); // 表示する
+        // ... (図書館の在室人数や総席数を更新するロロジック) ...
+    } else {
+        roomDCard.classList.add('hidden'); // 非表示にする
+    }
+
+    // ... (他の学習室の更新ロジック) ...
+
+    document.getElementById('last-updated-time').textContent = new Date().toLocaleString();
+}
+
+fetchRoomStatus();
+setInterval(fetchRoomStatus, 60000); // 1分ごとに更新
