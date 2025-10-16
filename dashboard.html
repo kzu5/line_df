@@ -1,282 +1,125 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>学習室 在室状況ダッシュボード</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f4f8;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-        .container {
-            max-width: 960px;
-            width: 100%;
-            margin: 0 auto;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            color: #4a90e2;
-            margin-bottom: 15px;
-            font-size: 2.2em;
-            font-weight: 700;
-        }
-        .last-updated {
-            font-size: 0.9em;
-            color: #777;
-            margin-bottom: 30px;
-        }
-        .rooms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-        .room-card {
-            background-color: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 200px;
-            position: relative; /* オーバーレイのために追加 */
-        }
-        .room-card:hover {
-            transform: translateY(-5px);
-        }
-        .room-content { /* コンテンツラッパーを追加 */
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 100%;
-        }
-        .room-card h2 {
-            font-size: 1.5em;
-            color: #333;
-            margin-bottom: 15px;
-        }
-        .status-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-        .remaining-seats {
-            font-size: 3.5em;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 10px;
-        }
-        .remaining-seats span {
-            font-size: 0.5em;
-            font-weight: normal;
-        }
-        .total-capacity { 
-            font-size: 0.9em;
-            color: #777;
-            margin-bottom: 10px;
-        }
-        .status-text {
-            font-size: 1em;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .status-icon.empty, .remaining-seats.empty { color: #5cb85c; }
-        .status-icon.low, .remaining-seats.low { color: #5cb85c; }
-        .status-icon.medium, .remaining-seats.medium { color: #f0ad4e; }
-        .status-icon.high, .remaining-seats.high { color: #d9534f; }
-        .status-icon.full, .remaining-seats.full { color: #d9534f; }
-        .progress-bar-container {
-            width: 80%;
-            background-color: #eee;
-            border-radius: 10px;
-            height: 12px;
-            margin-top: 15px;
-            overflow: hidden;
-        }
-        .progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
-        }
-        .progress-bar.low { background-color: #5cb85c; }
-        .progress-bar.medium { background-color: #f0ad4e; }
-        .progress-bar.high { background-color: #d9534f; }
-        .progress-bar.full { background-color: #d9534f; }
-        .guide-text { 
-            font-size: 1em;
-            color: #555;
-            margin-top: 30px;
-            background-color: #e3f2fd;
-            padding: 15px 20px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-        .information-section { 
-            margin-top: 40px;
-            text-align: left;
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-left: 5px solid #4a90e2; 
-        }
-        .information-section h2 {
-            color: #4a90e2;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
-        }
-        .information-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .information-section li {
-            margin-bottom: 10px;
-            color: #555;
-            line-height: 1.6;
-        }
-        .information-section li strong {
-            color: #333;
-        }
-        .room-card.hidden { 
-            display: none;
-        }
-        /* 定休日の施設カードのスタイル */
-        .room-card.closed {
-            opacity: 0.5; 
-            pointer-events: none; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
-            border: 1px solid #ccc; 
-        }
-        .room-card.closed:hover {
-            transform: none; 
-        }
-        /* 定休日のテキスト表示用のスタイル */
-        .closed-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1.2em;
-            color: #cc0000; 
-            border: 2px dashed #cc0000;
-            z-index: 10; 
-        }
+  <base target="_top">
+  <style>
+    /* ------------------------------------- */
+    /* CSS: ここにフロアマップのデザインを記述します */
+    /* ------------------------------------- */
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f2f5; }
+    h2 { text-align: center; color: #333; padding: 15px 0; background-color: #fff; border-bottom: 1px solid #eee; margin-bottom: 0; }
+    
+    #floor-map-container {
+      position: relative; 
+      width: 800px; /* フロアマップの全体の幅 */
+      height: 600px; /* フロアマップの全体の高さ */
+      margin: 30px auto;
+      border: 2px solid #ccc;
+      background-color: #e8e8e8;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
 
-        /* スマホ対応 */
-        @media (max-width: 600px) {
-            .rooms-grid {
-                grid-template-columns: 1fr;
-            }
-            h1 {
-                font-size: 1.8em;
-            }
-        }
-    </style>
+    .seat {
+      position: absolute; 
+      width: 80px; 
+      height: 60px; 
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.9em;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease-in-out;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .seat:hover {
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    /* ステータスごとの色 */
+    .status-空き { background-color: #8ce196; color: #1e6d30; } 
+    .status-使用中 { background-color: #ff9999; color: #cc0000; } 
+
+    .seat-name { font-weight: bold; font-size: 0.9em; line-height: 1.2; }
+    .seat-status { font-size: 0.75em; opacity: 0.9; margin-top: 2px; }
+    .seat-user { font-size: 0.7em; opacity: 0.8; margin-top: 2px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>リアルタイム 在室状況ダッシュボード</h1>
-        <p class="last-updated">最終更新: <span id="last-updated-time">--</span></p>
+  <h2>施設座席操作パネル</h2>
 
-        <div class="rooms-grid" id="rooms-container">
-            <div class="room-card" id="roomA-card">
-                <div class="room-content">
-                    <h2>生涯学習センター</h2>
-                    <div class="status-icon" id="roomA-icon"></div>
-                    <div class="remaining-seats" id="roomA-remaining">--<span>席</span></div>
-                    <div class="total-capacity">総席数: <span id="roomA-total-capacity">--</span>席</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" id="roomA-progress"></div>
-                    </div>
-                    <div class="status-text" id="roomA-status-text">--</div>
-                </div>
-                <div class="closed-overlay" id="roomA-closed-overlay" style="display: none;">休館日</div>
-            </div>
-
-            <div class="room-card" id="roomB-card">
-                <div class="room-content">
-                    <h2>創造館</h2>
-                    <div class="status-icon" id="roomB-icon"></div>
-                    <div class="remaining-seats" id="roomB-remaining">--<span>席</span></div>
-                    <div class="total-capacity">総席数: <span id="roomB-total-capacity">--</span>席</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" id="roomB-progress"></div>
-                    </div>
-                    <div class="status-text" id="roomB-status-text">--</div>
-                </div>
-                <div class="closed-overlay" id="roomB-closed-overlay" style="display: none;">休館日</div>
-            </div>
-
-            <div class="room-card" id="roomC-card">
-                <div class="room-content">
-                    <h2>アルラ</h2>
-                    <div class="status-icon" id="roomC-icon"></div>
-                    <div class="remaining-seats" id="roomC-remaining">--<span>席</span></div>
-                    <div class="total-capacity">総席数: <span id="roomC-total-capacity">--</span>席</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" id="roomC-progress"></div>
-                    </div>
-                    <div class="status-text" id="roomC-status-text">--</div>
-                </div>
-                <div class="closed-overlay" id="roomC-closed-overlay" style="display: none;">休館日</div>
-            </div>
-
-            <div class="room-card hidden" id="roomD-card">
-                <div class="room-content">
-                    <h2>図書館</h2>
-                    <div class="status-icon" id="roomD-icon"></div>
-                    <div class="remaining-seats" id="roomD-remaining">--<span>席</span></div>
-                    <div class="total-capacity">総席数: <span id="roomD-total-capacity">--</span>席</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" id="roomD-progress"></div>
-                    </div>
-                    <div class="status-text" id="roomD-status-text">--</div>
-                </div>
-                <div class="closed-overlay" id="roomD-closed-overlay" style="display: none;">休館日</div>
-            </div>
-        </div>
-
-        <p class="guide-text">
-            このページは学習室の現在の在室状況をリアルタイムで表示します。
-        </p>
-
-        <div class="information-section">
-            <h2>お知らせ・ご利用案内</h2>
-            <ul>
-                <li><strong>生涯学習センター:</strong> 平日 9:00〜21:00 / 土日祝 9:00〜17:00 (休館日: 月曜日)</li>
-                <li><strong>創造館:</strong> 毎日 10:00〜19:00 (休館日: 第3水曜日)</li>
-                <li><strong>アルラ:</strong> 毎日 9:30〜20:00 (休館日: 年末年始)</li>
-                <li><strong>図書館:</strong> 不定期で学習室を開放します。開放時はここに表示されます。</li>
-                <li>ご利用の際は、各施設の利用規約をご確認ください。</li>
-            </ul>
-        </div>
+  <div id="floor-map-container">
     </div>
-    <script>
-        /* ここに dashboard.js の内容を貼り付けます */
-    </script>
+
+  <script>
+    /* ------------------------------------------- */
+    /* JavaScript: ここに全てのロジックを記述します */
+    /* ------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', loadSeats);
+
+    // GASから座席データを取得し、フロアマップに描画
+    function loadSeats() {
+      // google.script.run はクライアント側からサーバー側(Code.gs)の関数を呼び出すためのGAS特有の機能です。
+      google.script.run
+        .withSuccessHandler(displaySeats) // 成功したら次の関数を呼び出す
+        .getSeatData(); // Code.gsで定義した関数
+    }
+
+    function displaySeats(seats) {
+      const container = document.getElementById('floor-map-container');
+      container.innerHTML = ''; // 既存の座席をクリアして再描画
+
+      seats.forEach(seat => {
+        const seatElement = document.createElement('div');
+        seatElement.className = `seat status-${seat.status}`;
+        seatElement.dataset.id = seat.id;
+        
+        // スプレッドシートのE列(X), F列(Y)座標をCSSで設定
+        seatElement.style.left = `${seat.x}px`;
+        seatElement.style.top = `${seat.y}px`;
+        
+        // クリックイベントハンドラを設定
+        seatElement.onclick = () => handleSeatClick(seat.id, seat.status, seat.user);
+
+        // 座席の表示内容を構築
+        seatElement.innerHTML = `
+          <div class="seat-name">${seat.name}</div>
+          <div class="seat-status">${seat.status}</div>
+          <div class="seat-user">${seat.status === '使用中' ? seat.user : ''}</div>
+        `;
+        container.appendChild(seatElement);
+      });
+    }
+
+    // 座席クリック時の処理
+    function handleSeatClick(seatId, currentStatus, currentUser) {
+      let userName = '';
+
+      if (currentStatus === '空き') {
+        // '空き' -> '使用中' にするとき
+        userName = prompt(`座席 ${seatId} の利用を開始します。\n利用者名を入力してください:`);
+        if (!userName || userName.trim() === '') {
+          alert('利用者名が入力されなかったため、ステータスは変更されませんでした。');
+          return;
+        }
+      } else {
+        // '使用中' -> '空き' にするとき
+        if (!confirm(`座席 ${seatId} (${currentUser}) の利用を終了し、「空き」に戻しますか？`)) {
+          return;
+        }
+        userName = '-'; // '空き'に戻すときは利用者名をクリア
+      }
+      
+      // サーバー側(Code.gs)の更新関数を呼び出し、成功したら画面を再描画
+      google.script.run
+        .withSuccessHandler(loadSeats) 
+        .updateSeatStatus(seatId, userName);
+    }
+  </script>
 </body>
 </html>
