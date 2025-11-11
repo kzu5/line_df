@@ -1,0 +1,95 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+#seating-chart {
+    /* 背景に座席表の画像を配置 */
+    background-image: url('座席表.jpg');
+    background-size: contain; 
+    background-repeat: no-repeat;
+    
+    /* ※ 画像サイズに合わせて調整してください。ここでは横幅800pxとして計算しています */
+    width: 800px; 
+    height: 600px; 
+    
+    position: relative;
+    border: 1px solid #ccc; /* 枠線 */
+}
+
+.seat {
+    position: absolute;
+    cursor: pointer; 
+    border: 2px solid #333;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.8; /* 背景画像が見えるように透過 */
+    transition: background-color 0.2s, opacity 0.2s; /* 状態変化を滑らかに */
+}
+
+/* --- 座席の状態による色の設定 --- */
+.available {
+    /* 空きあり: 緑色 */
+    background-color: #4CAF50; 
+    color: white;
+}
+
+.occupied {
+    /* 使用中: 赤色 */
+    background-color: #F44336; 
+    color: white;
+}
+
+/* ----------------------------------------------------
+   30席すべての座標設定 (幅800pxを基準) 
+   ---------------------------------------------------- */
+
+/* 1. 左側 (座席8～14) */
+#seat-8 { top: 60px; left: 20px; width: 90px; height: 50px; }
+#seat-9 { top: 120px; left: 20px; width: 90px; height: 50px; }
+#seat-10 { top: 180px; left: 20px; width: 90px; height: 50px; }
+#seat-11 { top: 240px; left: 20px; width: 90px; height: 50px; }
+#seat-12 { top: 320px; left: 20px; width: 90px; height: 50px; }
+#seat-13 { top: 380px; left: 20px; width: 90px; height: 50px; }
+#seat-14 { top: 440px; left: 20px; width: 90px; height: 50px; }
+
+/* 2. 右側 (座席1～7) */
+#seat-1 { top: 60px; right: 20px; width: 90px; height: 50px; }
+#seat-2 { top: 120px; right: 20px; width: 90px; height: 50px; }
+#seat-3 { top: 180px; right: 20px; width: 90px; height: 50px; }
+#seat-4 { top: 240px; right: 20px; width: 90px; height: 50px; }
+#seat-5 { top: 320px; right: 20px; width: 90px; height: 50px; }
+#seat-6 { top: 380px; right: 20px; width: 90px; height: 50px; }
+#seat-7 { top: 440px; right: 20px; width: 90px; height: 50px; }
+
+/* 3. 中央上段右ブロック (座席15～18) */
+#seat-15 { top: 270px; left: 580px; width: 70px; height: 60px; }
+#seat-16 { top: 340px; left: 580px; width: 70px; height: 60px; }
+#seat-17 { top: 340px; left: 510px; width: 70px; height: 60px; }
+#seat-18 { top: 270px; left: 510px; width: 70px; height: 60px; }
+
+/* 4. 中央上段左ブロック (座席23～26) */
+#seat-23 { top: 270px; left: 340px; width: 70px; height: 60px; }
+#seat-24 { top: 340px; left: 340px; width: 70px; height: 60px; }
+#seat-25 { top: 340px; left: 270px; width: 70px; height: 60px; }
+#seat-26 { top: 270px; left: 270px; width: 70px; height: 60px; }
+
+/* 5. 中央下段右ブロック (座席19～22) */
+#seat-19 { top: 460px; left: 580px; width: 70px; height: 60px; }
+#seat-20 { top: 530px; left: 580px; width: 70px; height: 60px; }
+#seat-21 { top: 530px; left: 510px; width: 70px; height: 60px; }
+#seat-22 { top: 460px; left: 510px; width: 70px; height: 60px; }
+
+/* 6. 中央下段左ブロック (座席27～30) */
+#seat-27 { top: 460px; left: 340px; width: 70px; height: 60px; }
+#seat-28 { top: 530px; left: 340px; width: 70px; height: 60px; }
+#seat-29 { top: 530px; left: 270px; width: 70px; height: 60px; }
+#seat-30 { top: 460px; left: 270px; width: 70px; height: 60px; }

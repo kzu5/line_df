@@ -1,6 +1,0 @@
-#floor-map-container {
-    /* ...その他のスタイル... */
-    background-image: url('URL_OF_YOUR_FLOOR_MAP_IMAGE.png'); /* 画像のURLを指定 */
-    background-size: cover; /* コンテナいっぱいに広げる */
-    background-repeat: no-repeat;
-}
