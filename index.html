@@ -1,125 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <base target="_top">
-  <style>
-    /* ------------------------------------- */
-    /* CSS: ここにフロアマップのデザインを記述します */
-    /* ------------------------------------- */
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f2f5; }
-    h2 { text-align: center; color: #333; padding: 15px 0; background-color: #fff; border-bottom: 1px solid #eee; margin-bottom: 0; }
-    
-    #floor-map-container {
-      position: relative; 
-      width: 800px; /* フロアマップの全体の幅 */
-      height: 600px; /* フロアマップの全体の高さ */
-      margin: 30px auto;
-      border: 2px solid #ccc;
-      background-color: #e8e8e8;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
-
-    .seat {
-      position: absolute; 
-      width: 80px; 
-      height: 60px; 
-      border-radius: 5px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.9em;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s ease-in-out;
-      border: 1px solid rgba(0,0,0,0.1);
-    }
-    .seat:hover {
-      transform: scale(1.05);
-      z-index: 10;
-    }
-
-    /* ステータスごとの色 */
-    .status-空き { background-color: #8ce196; color: #1e6d30; } 
-    .status-使用中 { background-color: #ff9999; color: #cc0000; } 
-
-    .seat-name { font-weight: bold; font-size: 0.9em; line-height: 1.2; }
-    .seat-status { font-size: 0.75em; opacity: 0.9; margin-top: 2px; }
-    .seat-user { font-size: 0.7em; opacity: 0.8; margin-top: 2px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伊那市生涯学習センター学習室 座席表</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>施設座席操作パネル</h2>
+    <div id="seating-chart">
+        <div class="seat available" id="seat-1"></div>
+        <div class="seat available" id="seat-2"></div>
+        <div class="seat available" id="seat-3"></div>
+        <div class="seat available" id="seat-4"></div>
+        <div class="seat available" id="seat-5"></div>
+        <div class="seat available" id="seat-6"></div>
+        <div class="seat available" id="seat-7"></div>
+        
+        <div class="seat available" id="seat-8"></div>
+        <div class="seat available" id="seat-9"></div>
+        <div class="seat available" id="seat-10"></div>
+        <div class="seat available" id="seat-11"></div>
+        <div class="seat available" id="seat-12"></div>
+        <div class="seat available" id="seat-13"></div>
+        <div class="seat available" id="seat-14"></div>
 
-  <div id="floor-map-container">
+        <div class="seat available" id="seat-15"></div>
+        <div class="seat available" id="seat-16"></div>
+        <div class="seat available" id="seat-17"></div>
+        <div class="seat available" id="seat-18"></div>
+
+        <div class="seat available" id="seat-23"></div>
+        <div class="seat available" id="seat-24"></div>
+        <div class="seat available" id="seat-25"></div>
+        <div class="seat available" id="seat-26"></div>
+
+        <div class="seat available" id="seat-19"></div>
+        <div class="seat available" id="seat-20"></div>
+        <div class="seat available" id="seat-21"></div>
+        <div class="seat available" id="seat-22"></div>
+
+        <div class="seat available" id="seat-27"></div>
+        <div class="seat available" id="seat-28"></div>
+        <div class="seat available" id="seat-29"></div>
+        <div class="seat available" id="seat-30"></div>
     </div>
-
-  <script>
-    /* ------------------------------------------- */
-    /* JavaScript: ここに全てのロジックを記述します */
-    /* ------------------------------------------- */
-    document.addEventListener('DOMContentLoaded', loadSeats);
-
-    // GASから座席データを取得し、フロアマップに描画
-    function loadSeats() {
-      // google.script.run はクライアント側からサーバー側(Code.gs)の関数を呼び出すためのGAS特有の機能です。
-      google.script.run
-        .withSuccessHandler(displaySeats) // 成功したら次の関数を呼び出す
-        .getSeatData(); // Code.gsで定義した関数
-    }
-
-    function displaySeats(seats) {
-      const container = document.getElementById('floor-map-container');
-      container.innerHTML = ''; // 既存の座席をクリアして再描画
-
-      seats.forEach(seat => {
-        const seatElement = document.createElement('div');
-        seatElement.className = `seat status-${seat.status}`;
-        seatElement.dataset.id = seat.id;
-        
-        // スプレッドシートのE列(X), F列(Y)座標をCSSで設定
-        seatElement.style.left = `${seat.x}px`;
-        seatElement.style.top = `${seat.y}px`;
-        
-        // クリックイベントハンドラを設定
-        seatElement.onclick = () => handleSeatClick(seat.id, seat.status, seat.user);
-
-        // 座席の表示内容を構築
-        seatElement.innerHTML = `
-          <div class="seat-name">${seat.name}</div>
-          <div class="seat-status">${seat.status}</div>
-          <div class="seat-user">${seat.status === '使用中' ? seat.user : ''}</div>
-        `;
-        container.appendChild(seatElement);
-      });
-    }
-
-    // 座席クリック時の処理
-    function handleSeatClick(seatId, currentStatus, currentUser) {
-      let userName = '';
-
-      if (currentStatus === '空き') {
-        // '空き' -> '使用中' にするとき
-        userName = prompt(`座席 ${seatId} の利用を開始します。\n利用者名を入力してください:`);
-        if (!userName || userName.trim() === '') {
-          alert('利用者名が入力されなかったため、ステータスは変更されませんでした。');
-          return;
-        }
-      } else {
-        // '使用中' -> '空き' にするとき
-        if (!confirm(`座席 ${seatId} (${currentUser}) の利用を終了し、「空き」に戻しますか？`)) {
-          return;
-        }
-        userName = '-'; // '空き'に戻すときは利用者名をクリア
-      }
-      
-      // サーバー側(Code.gs)の更新関数を呼び出し、成功したら画面を再描画
-      google.script.run
-        .withSuccessHandler(loadSeats) 
-        .updateSeatStatus(seatId, userName);
-    }
-  </script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
